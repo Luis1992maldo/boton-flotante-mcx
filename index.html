@@ -3,11 +3,51 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Botón flotante</title>
+<title>Producto para perder peso</title>
 <style>
   body {
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    line-height: 1.5;
+  }
+  header {
+    background-color: #f5f5f5;
+    padding: 40px 20px;
+    text-align: center;
+  }
+  header h1 {
+    margin: 0 0 10px;
+    font-size: 2em;
+  }
+  section {
+    padding: 20px;
+  }
+  .features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .feature {
+    flex: 1;
+    min-width: 200px;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  .cta {
+    text-align: center;
+    margin-top: 40px;
+  }
+  .cta a {
+    background-color: #ff5722;
+    color: #fff;
+    padding: 15px 30px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-size: 18px;
   }
   #floating-button {
     position: fixed;
@@ -21,11 +61,9 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    font-family: 'Arial', sans-serif;
     font-size: 16px;
     text-decoration: none;
     transition: all 0.3s ease;
-    animation: bounceIn 1s ease;
     z-index: 99999;
   }
   #floating-button:hover {
@@ -37,14 +75,38 @@
     width: 24px;
     height: 24px;
   }
-  @keyframes bounceIn {
-    0% { opacity: 0; transform: scale(0.5); }
-    60% { opacity: 1; transform: scale(1.1); }
-    100% { transform: scale(1); }
-  }
 </style>
 </head>
 <body>
+<header>
+  <h1>Transforma tu cuerpo</h1>
+  <p>Descubre nuestra fórmula pensada para apoyar tu proceso de pérdida de peso.</p>
+</header>
+<section>
+  <h2>Beneficios principales</h2>
+  <div class="features">
+    <div class="feature">
+      <h3>Fórmula natural</h3>
+      <p>Ingredientes seleccionados que se ajustan a una dieta equilibrada.</p>
+    </div>
+    <div class="feature">
+      <h3>Fácil de usar</h3>
+      <p>Integra el producto a tu rutina diaria con sencillos pasos.</p>
+    </div>
+    <div class="feature">
+      <h3>Soporte profesional</h3>
+      <p>Acceso a guías y asesoría para mejorar tus resultados.</p>
+    </div>
+  </div>
+</section>
+<section>
+  <h2>Testimonios</h2>
+  <p>"He notado cambios positivos desde que comencé a usar este producto" - Ana</p>
+  <p>"La combinación perfecta para mantener mi estilo de vida saludable" - Luis</p>
+</section>
+<div class="cta">
+  <a href="#" class="buy-button">Comprar ahora</a>
+</div>
 <a id="floating-button" href="https://wa.me/1234567890" target="_blank">
   <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Icon">
   <span>Contáctanos</span>
