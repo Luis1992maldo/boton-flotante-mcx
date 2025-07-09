@@ -1,53 +1,975 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Botón flotante</title>
-<style>
-  body {
-    margin: 0;
-    padding: 0;
-  }
-  #floating-button {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #25D366;
-    color: white;
-    padding: 12px 20px;
-    border-radius: 50px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'Arial', sans-serif;
-    font-size: 16px;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    animation: bounceIn 1s ease;
-    z-index: 99999;
-  }
-  #floating-button:hover {
-    background-color: #1ebe5d;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
-    transform: scale(1.05);
-  }
-  #floating-button img {
-    width: 24px;
-    height: 24px;
-  }
-  @keyframes bounceIn {
-    0% { opacity: 0; transform: scale(0.5); }
-    60% { opacity: 1; transform: scale(1.1); }
-    100% { transform: scale(1); }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Feliz Cumpleaños!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+        
+        /* Pantalla de lluvia de códigos */
+        .code-rain-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .matrix-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .matrix-column {
+            position: absolute;
+            top: -100%;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            font-weight: bold;
+            color: #0f0;
+            text-shadow: 0 0 5px #0f0;
+            animation: matrix-fall linear infinite;
+        }
+        
+        @keyframes matrix-fall {
+            0% { top: -100%; }
+            100% { top: 100%; }
+        }
+        
+        .loading-text {
+            position: relative;
+            z-index: 10001;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.5em;
+            font-weight: bold;
+            text-shadow: 0 0 10px #0f0;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            0% { text-shadow: 0 0 10px #0f0; }
+            100% { text-shadow: 0 0 20px #0f0, 0 0 30px #0f0; }
+        }
+        
+        .loading-bar {
+            width: 80%;
+            max-width: 300px;
+            height: 4px;
+            background: rgba(0, 255, 0, 0.3);
+            border-radius: 2px;
+            margin-top: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .loading-progress {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #0f0, #00ff00, #0f0);
+            background-size: 200% 100%;
+            animation: loading 3s ease-in-out, shimmer 1s linear infinite;
+        }
+        
+        @keyframes loading {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        /* Tarjeta principal */
+        .card {
+            width: 95%;
+            max-width: 380px;
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.8s ease;
+        }
+        
+        .card.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .balloons {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .balloon {
+            width: 50px;
+            height: 65px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .balloon:nth-child(1) {
+            background: linear-gradient(145deg, #ff6b6b, #ee5a52);
+            animation-delay: 0s;
+        }
+        
+        .balloon:nth-child(2) {
+            background: linear-gradient(145deg, #4ecdc4, #44a08d);
+            animation-delay: 0.5s;
+        }
+        
+        .balloon:nth-child(3) {
+            background: linear-gradient(145deg, #45b7d1, #3a9bc1);
+            animation-delay: 1s;
+        }
+        
+        .balloon:nth-child(4) {
+            background: linear-gradient(145deg, #f9ca24, #f0932b);
+            animation-delay: 1.5s;
+        }
+        
+        .balloon:nth-child(5) {
+            background: linear-gradient(145deg, #6c5ce7, #5f3dc4);
+            animation-delay: 2s;
+        }
+        
+        .balloon::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 50px;
+            background: #666;
+            border-radius: 1px;
+        }
+        
+        .balloon:hover {
+            transform: scale(1.1) translateY(-5px);
+        }
+        
+        .balloon.popped {
+            animation: pop 0.5s ease-out forwards;
+        }
+        
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(0); opacity: 0; }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .title {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #f9ca24);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .name-display {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            letter-spacing: 2px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: nameGlow 4s ease-in-out infinite;
+        }
+        
+        @keyframes nameGlow {
+            0%, 100% { text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+            50% { text-shadow: 0 0 20px #4ecdc4, 2px 2px 4px rgba(0,0,0,0.5); }
+        }
+        
+        .age-display {
+            font-size: 1.8em;
+            color: #f9ca24;
+            margin-bottom: 25px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        .cake {
+            width: 120px;
+            height: 80px;
+            background: linear-gradient(145deg, #8B4513, #A0522D);
+            border-radius: 10px;
+            margin: 0 auto 20px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            animation: cakeShine 6s ease-in-out infinite;
+        }
+        
+        @keyframes cakeShine {
+            0%, 100% { box-shadow: 0 0 10px rgba(139, 69, 19, 0.5); }
+            50% { box-shadow: 0 0 25px rgba(255, 107, 107, 0.7); }
+        }
+        
+        .cake:hover {
+            transform: scale(1.05);
+        }
+        
+        .cake::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: linear-gradient(145deg, #ff6b6b, #ee5a52);
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .candle {
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 20px;
+            background: linear-gradient(145deg, #f9ca24, #f0932b);
+            border-radius: 3px;
+        }
+        
+        .flame {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 10px;
+            background: linear-gradient(145deg, #ff6b6b, #f9ca24);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: flicker 1s ease-in-out infinite alternate;
+        }
+        
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scale(1); }
+            100% { transform: translateX(-50%) scale(1.1) rotate(2deg); }
+        }
+        
+        .firework {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #fff;
+            border-radius: 50%;
+            animation: explode 2s ease-out forwards;
+        }
+        
+        @keyframes explode {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(25);
+                opacity: 0;
+            }
+        }
+        
+        .firework-burst {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: burst 1.5s ease-out forwards;
+        }
+        
+        @keyframes burst {
+            0% {
+                transform: scale(0) translate(0, 0);
+                opacity: 1;
+                box-shadow: 0 0 0 0 currentColor;
+            }
+            50% {
+                transform: scale(1) translate(var(--end-x), var(--end-y));
+                opacity: 1;
+                box-shadow: 0 0 20px 5px currentColor;
+            }
+            100% {
+                transform: scale(2) translate(var(--end-x), var(--end-y));
+                opacity: 0;
+                box-shadow: 0 0 40px 10px transparent;
+            }
+        }
+        
+        .firework-trail {
+            position: absolute;
+            width: 3px;
+            height: 20px;
+            background: linear-gradient(to top, transparent, currentColor);
+            border-radius: 50%;
+            animation: trail 1s ease-out forwards;
+        }
+        
+        @keyframes trail {
+            0% {
+                transform: translateY(50px) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(0) scale(0);
+                opacity: 0;
+            }
+        }
+        
+        .firework-spark {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: currentColor;
+            border-radius: 50%;
+            animation: spark 2s ease-out forwards;
+        }
+        
+        @keyframes spark {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0);
+                opacity: 0;
+            }
+        }
+        
+        .big-firework {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            z-index: 9999;
+            animation: bigExplode 3s ease-out forwards;
+        }
+        
+        @keyframes bigExplode {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+                box-shadow: 0 0 0 0 currentColor;
+            }
+            30% {
+                transform: scale(1);
+                opacity: 1;
+                box-shadow: 0 0 30px 10px currentColor;
+            }
+            100% {
+                transform: scale(8);
+                opacity: 0;
+                box-shadow: 0 0 100px 30px transparent;
+            }
+        }
+        
+        .celebrate-btn {
+            background: linear-gradient(145deg, #ff6b6b, #4ecdc4);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .celebrate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+        
+        .celebrate-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s linear infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ff6b6b;
+            animation: fall 3s linear infinite;
+        }
+        
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .sparkle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #fff;
+            border-radius: 50%;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { 
+                transform: scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1) rotate(180deg);
+                opacity: 1;
+            }
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        /* Efectos de partículas de fondo */
+        .background-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            animation: floatParticle 8s linear infinite;
+        }
+        
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
 </head>
 <body>
-<a id="floating-button" href="https://wa.me/1234567890" target="_blank">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Icon">
-  <span>Contáctanos</span>
-</a>
+    <!-- Pantalla de lluvia de códigos -->
+    <div class="code-rain-screen" id="codeRainScreen">
+        <div class="matrix-container" id="matrixContainer"></div>
+        <div class="loading-text">Preparando celebración...</div>
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+    </div>
+    
+    <!-- Partículas de fondo -->
+    <div class="background-particles" id="backgroundParticles"></div>
+    
+    <!-- Tarjeta principal -->
+    <div class="card" id="birthdayCard">
+        <div class="balloons">
+            <div class="balloon" onclick="popBalloon(this)"></div>
+            <div class="balloon" onclick="popBalloon(this)"></div>
+            <div class="balloon" onclick="popBalloon(this)"></div>
+            <div class="balloon" onclick="popBalloon(this)"></div>
+            <div class="balloon" onclick="popBalloon(this)"></div>
+        </div>
+        
+        <div class="title">¡Feliz Cumpleaños!</div>
+        
+        <div class="name-display" id="nameDisplay"></div>
+        <div class="age-display" id="ageDisplay"></div>
+        
+        <div class="cake" onclick="blowCandle()">
+            <div class="candle">
+                <div class="flame" id="flame"></div>
+            </div>
+        </div>
+        
+        <button class="celebrate-btn" onclick="celebrate()">¡Celebrar! 🎉</button>
+    </div>
+
+    <script>
+        // ========== CONFIGURACIÓN - EDITA AQUÍ ==========
+        const BIRTHDAY_PERSON = "ALEXDEV";  // Cambia este nombre
+        const BIRTHDAY_AGE = 25;            // Cambia esta edad
+        // ===============================================
+        
+        // Configuración de la lluvia de código
+        const matrixChars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*(){}[]|\\:";\'<>?,./`~';
+        let matrixInterval;
+        
+        // Inicializar la aplicación
+        window.addEventListener('load', () => {
+            initializeMatrix();
+            startMatrixRain();
+            
+            // Mostrar la tarjeta después de 4 segundos
+            setTimeout(() => {
+                hideMatrixScreen();
+                showBirthdayCard();
+            }, 4000);
+        });
+        
+        function initializeMatrix() {
+            const container = document.getElementById('matrixContainer');
+            const screenWidth = window.innerWidth;
+            const columnWidth = 20;
+            const numColumns = Math.floor(screenWidth / columnWidth);
+            
+            for (let i = 0; i < numColumns; i++) {
+                createMatrixColumn(i * columnWidth);
+            }
+        }
+        
+        function createMatrixColumn(x) {
+            const column = document.createElement('div');
+            column.className = 'matrix-column';
+            column.style.left = x + 'px';
+            column.style.animationDuration = (Math.random() * 2 + 1) + 's';
+            column.style.animationDelay = Math.random() * 2 + 's';
+            
+            // Crear caracteres aleatorios
+            let content = '';
+            for (let i = 0; i < 20; i++) {
+                const char = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+                content += char + '<br>';
+            }
+            column.innerHTML = content;
+            
+            document.getElementById('matrixContainer').appendChild(column);
+        }
+        
+        function startMatrixRain() {
+            matrixInterval = setInterval(() => {
+                const columns = document.querySelectorAll('.matrix-column');
+                columns.forEach(column => {
+                    let content = '';
+                    for (let i = 0; i < 20; i++) {
+                        const char = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+                        content += char + '<br>';
+                    }
+                    column.innerHTML = content;
+                });
+            }, 100);
+        }
+        
+        function hideMatrixScreen() {
+            clearInterval(matrixInterval);
+            const screen = document.getElementById('codeRainScreen');
+            screen.style.opacity = '0';
+            screen.style.transition = 'opacity 1s ease';
+            
+            setTimeout(() => {
+                screen.style.display = 'none';
+            }, 1000);
+        }
+        
+        function showBirthdayCard() {
+            const card = document.getElementById('birthdayCard');
+            const nameDisplay = document.getElementById('nameDisplay');
+            const ageDisplay = document.getElementById('ageDisplay');
+            
+            // Configurar nombre y edad
+            nameDisplay.textContent = `¡${BIRTHDAY_PERSON}!`;
+            ageDisplay.textContent = `${BIRTHDAY_AGE} años increíbles`;
+            
+            // Mostrar tarjeta con animación
+            card.classList.add('show');
+            
+            // Inicializar efectos de fondo
+            createBackgroundParticles();
+            
+            // Crear chispas aleatorias
+            setInterval(createSparkles, 3000);
+        }
+        
+        function createBackgroundParticles() {
+            const container = document.getElementById('backgroundParticles');
+            
+            setInterval(() => {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                
+                container.appendChild(particle);
+                
+                setTimeout(() => {
+                    particle.remove();
+                }, 10000);
+            }, 800);
+        }
+        
+        function createSparkles() {
+            const card = document.querySelector('.card');
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#6c5ce7'];
+            
+            for (let i = 0; i < 5; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.animationDelay = Math.random() * 2 + 's';
+                
+                card.appendChild(sparkle);
+                
+                setTimeout(() => {
+                    sparkle.remove();
+                }, 2000);
+            }
+        }
+        
+        function popBalloon(balloon) {
+            balloon.classList.add('popped');
+            createExplosion(balloon);
+            
+            setTimeout(() => {
+                balloon.classList.remove('popped');
+                balloon.style.transform = 'scale(1)';
+                balloon.style.opacity = '1';
+            }, 2000);
+        }
+        
+        function createExplosion(element) {
+            const rect = element.getBoundingClientRect();
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#6c5ce7'];
+            
+            for (let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'confetti';
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.left = rect.left + rect.width/2 + 'px';
+                particle.style.top = rect.top + rect.height/2 + 'px';
+                particle.style.position = 'fixed';
+                particle.style.zIndex = '1000';
+                
+                const angle = (i / 8) * Math.PI * 2;
+                const velocity = 100;
+                const vx = Math.cos(angle) * velocity;
+                const vy = Math.sin(angle) * velocity;
+                
+                particle.style.animation = `explodeParticle 1s ease-out forwards`;
+                particle.style.setProperty('--vx', vx + 'px');
+                particle.style.setProperty('--vy', vy + 'px');
+                
+                document.body.appendChild(particle);
+                
+                setTimeout(() => {
+                    particle.remove();
+                }, 1000);
+            }
+        }
+        
+        function blowCandle() {
+            const flame = document.getElementById('flame');
+            flame.style.display = 'none';
+            
+            createFireworks();
+            
+            setTimeout(() => {
+                flame.style.display = 'block';
+            }, 3000);
+        }
+        
+        function createFireworks() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#6c5ce7', '#e17055', '#00b894'];
+            
+            for (let i = 0; i < 15; i++) {
+                const firework = document.createElement('div');
+                firework.className = 'firework';
+                firework.style.background = colors[Math.floor(Math.random() * colors.length)];
+                firework.style.left = Math.random() * 100 + '%';
+                firework.style.top = Math.random() * 100 + '%';
+                firework.style.animationDelay = Math.random() * 2 + 's';
+                
+                document.querySelector('.card').appendChild(firework);
+                
+                setTimeout(() => {
+                    firework.remove();
+                }, 2000);
+            }
+        }
+        
+        function createSpectacularFireworks() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#6c5ce7', '#e17055', '#00b894', '#ff4757', '#2ed573', '#ffa502'];
+            
+            // Crear múltiples explosiones grandes
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    createBigFirework(colors[Math.floor(Math.random() * colors.length)]);
+                }, i * 300);
+            }
+            
+            // Crear fuegos artificiales con rastros
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    createFireworkWithTrail(colors[Math.floor(Math.random() * colors.length)]);
+                }, Math.random() * 2000);
+            }
+            
+            // Crear chispas múltiples
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    createFireworkSpark(colors[Math.floor(Math.random() * colors.length)]);
+                }, Math.random() * 3000);
+            }
+        }
+        
+        function createBigFirework(color) {
+            const firework = document.createElement('div');
+            firework.className = 'big-firework';
+            firework.style.background = color;
+            firework.style.color = color;
+            firework.style.left = Math.random() * 80 + 10 + '%';
+            firework.style.top = Math.random() * 60 + 20 + '%';
+            
+            document.body.appendChild(firework);
+            
+            // Crear burst de partículas
+            setTimeout(() => {
+                createFireworkBurst(firework.style.left, firework.style.top, color);
+            }, 900);
+            
+            setTimeout(() => {
+                firework.remove();
+            }, 3000);
+        }
+        
+        function createFireworkWithTrail(color) {
+            const trail = document.createElement('div');
+            trail.className = 'firework-trail';
+            trail.style.background = `linear-gradient(to top, transparent, ${color})`;
+            trail.style.color = color;
+            trail.style.left = Math.random() * 90 + 5 + '%';
+            trail.style.top = Math.random() * 80 + 10 + '%';
+            
+            document.body.appendChild(trail);
+            
+            setTimeout(() => {
+                trail.remove();
+            }, 1000);
+        }
+        
+        function createFireworkBurst(x, y, color) {
+            const numParticles = 12;
+            
+            for (let i = 0; i < numParticles; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'firework-burst';
+                particle.style.background = color;
+                particle.style.color = color;
+                particle.style.left = x;
+                particle.style.top = y;
+                
+                const angle = (i / numParticles) * Math.PI * 2;
+                const distance = 50 + Math.random() * 30;
+                const endX = Math.cos(angle) * distance;
+                const endY = Math.sin(angle) * distance;
+                
+                particle.style.setProperty('--end-x', endX + 'px');
+                particle.style.setProperty('--end-y', endY + 'px');
+                
+                document.body.appendChild(particle);
+                
+                setTimeout(() => {
+                    particle.remove();
+                }, 1500);
+            }
+        }
+        
+        function createFireworkSpark(color) {
+            const spark = document.createElement('div');
+            spark.className = 'firework-spark';
+            spark.style.background = color;
+            spark.style.color = color;
+            spark.style.left = Math.random() * 100 + '%';
+            spark.style.top = Math.random() * 100 + '%';
+            
+            document.body.appendChild(spark);
+            
+            setTimeout(() => {
+                spark.remove();
+            }, 2000);
+        }
+        
+        function celebrate() {
+            // Crear efecto de sonido simulado
+            playBirthdaySound();
+            
+            // Crear espectacular show de fuegos artificiales
+            createSpectacularFireworks();
+            
+            // Crear confeti masivo
+            createConfetti();
+            
+            // Animar globos
+            animateAllBalloons();
+            
+            // Crear fuegos artificiales adicionales después de un momento
+            setTimeout(() => {
+                createSpectacularFireworks();
+            }, 2000);
+            
+            // Mostrar mensaje de celebración
+            setTimeout(() => {
+                showCelebrationMessage();
+            }, 1500);
+        }
+        
+        function playBirthdaySound() {
+            // Simular efecto de sonido con vibración en dispositivos móviles
+            if (navigator.vibrate) {
+                navigator.vibrate([100, 50, 100, 50, 100, 50, 200]);
+            }
+        }
+        
+        function animateAllBalloons() {
+            const balloons = document.querySelectorAll('.balloon');
+            balloons.forEach((balloon, index) => {
+                setTimeout(() => {
+                    balloon.style.transform = 'translateY(-20px) scale(1.1)';
+                    setTimeout(() => {
+                        balloon.style.transform = 'translateY(0) scale(1)';
+                    }, 500);
+                }, index * 100);
+            });
+        }
+        
+        function createConfetti() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#6c5ce7', '#e17055', '#00b894'];
+            
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+        
+        function showCelebrationMessage() {
+            const messages = [
+                `¡Que tengas un cumpleaños increíble, ${BIRTHDAY_PERSON}! 🎂🎉`,
+                `¡Disfruta tus ${BIRTHDAY_AGE} años al máximo! 🎈✨`,
+                `¡Que todos tus deseos se cumplan! 🌟🎁`,
+                `¡Eres increíble! ¡Feliz cumpleaños! 🎊💖`
+            ];
+            
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            alert(randomMessage);
+        }
+        
+        // Agregar estilos para la animación de explosión de partículas
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes explodeParticle {
+                0% {
+                    transform: translate(0, 0) scale(1);
+                    opacity: 1;
+                }
+                100% {
+                    transform: translate(var(--vx), var(--vy)) scale(0);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
 </body>
 </html>
